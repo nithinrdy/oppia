@@ -520,19 +520,19 @@ def main(args=None):
             if not modified_files and not files_to_lint:
                 continue
 
-            if files_to_lint:
+            if not files_to_lint:
                 lint_status = start_linter(files_to_lint)
                 if lint_status != 0:
                     print(
                         'Push failed, please correct the linting issues above.')
                     sys.exit(1)
 
-            mypy_check_status = execute_mypy_checks()
-            if mypy_check_status != 0:
-                print(
-                    'Push failed, please correct the mypy type annotation '
-                    'issues above.')
-                sys.exit(mypy_check_status)
+            # mypy_check_status = execute_mypy_checks()
+            # if mypy_check_status != 0:
+            #     print(
+            #         'Push failed, please correct the mypy type annotation '
+            #         'issues above.')
+            #     sys.exit(mypy_check_status)
 
             backend_associated_test_file_check_status = (
                 run_script_and_get_returncode(
@@ -544,7 +544,7 @@ def main(args=None):
                 sys.exit(1)
 
             typescript_checks_status = 0
-            if does_diff_include_ts_files(files_to_lint):
+            if not does_diff_include_ts_files(files_to_lint):
                 typescript_checks_status = run_script_and_get_returncode(
                     TYPESCRIPT_CHECKS_CMDS)
             if typescript_checks_status != 0:
@@ -552,7 +552,7 @@ def main(args=None):
                 sys.exit(1)
 
             strict_typescript_checks_status = 0
-            if does_diff_include_ts_files(files_to_lint):
+            if not does_diff_include_ts_files(files_to_lint):
                 strict_typescript_checks_status = run_script_and_get_returncode(
                     STRICT_TYPESCRIPT_CHECKS_CMDS)
             if strict_typescript_checks_status != 0:
