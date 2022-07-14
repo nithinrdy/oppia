@@ -16,7 +16,6 @@
  * @fileoverview End-to-end tests for the story viewer.
  */
 
-var action = require('../protractor_utils/action.js');
 var forms = require('../protractor_utils/forms.js');
 var general = require('../protractor_utils/general.js');
 var users = require('../protractor_utils/users.js');
@@ -29,10 +28,8 @@ var TopicsAndSkillsDashboardPage =
   require('../protractor_utils/TopicsAndSkillsDashboardPage.js');
 var TopicAndStoryViewerPage = require(
   '../protractor_utils/TopicAndStoryViewerPage.js');
-var TopicViewerPage = require('../protractor_utils/TopicViewerPage.js');
 var TopicEditorPage = require('../protractor_utils/TopicEditorPage.js');
 var StoryEditorPage = require('../protractor_utils/StoryEditorPage.js');
-var SubTopicViewerPage = require('../protractor_utils/SubTopicViewerPage.js');
 var ExplorationEditorPage =
   require('../protractor_utils/ExplorationEditorPage.js');
 var ExplorationPlayerPage =
@@ -42,11 +39,9 @@ var SkillEditorPage = require('../protractor_utils/SkillEditorPage.js');
 describe('Topic and Story viewer functionality', function() {
   var adminPage = null;
   var topicAndStoryViewerPage = null;
-  var topicViewerPage = null;
   var topicsAndSkillsDashboardPage = null;
   var topicEditorPage = null;
   var storyEditorPage = null;
-  var subTopicViewerPage = null;
   var explorationPlayerPage = null;
   var dummyExplorationIds = [];
   var skillId = null;
@@ -59,7 +54,7 @@ describe('Topic and Story viewer functionality', function() {
       language: 'English'
     };
 
-    for (var i = 1; i <= 3; i++) {
+    for (var i = 1; i <= 2; i++) {
       await workflow.createAndPublishTwoCardExploration(
         `Exploration TASV1 - ${i}`,
         EXPLORATION.category,
@@ -79,13 +74,11 @@ describe('Topic and Story viewer functionality', function() {
     explorationEditorMainTab = explorationEditorPage.getMainTab();
     topicAndStoryViewerPage = (
       new TopicAndStoryViewerPage.TopicAndStoryViewerPage());
-    topicViewerPage = new TopicViewerPage.TopicViewerPage();
     topicsAndSkillsDashboardPage = (
       new TopicsAndSkillsDashboardPage.TopicsAndSkillsDashboardPage());
     topicEditorPage = new TopicEditorPage.TopicEditorPage();
     skillEditorPage = new SkillEditorPage.SkillEditorPage();
     storyEditorPage = new StoryEditorPage.StoryEditorPage();
-    subTopicViewerPage = new SubTopicViewerPage.SubTopicViewerPage();
     await users.createAndLoginCurriculumAdminUser(
       'creator@storyViewer.com', 'creatorStoryViewer');
     await createDummyExplorations();
@@ -169,7 +162,7 @@ describe('Topic and Story viewer functionality', function() {
       'Story TASV1', 'storyplayertasvone', 'Story description',
       Constants.TEST_SVG_PATH);
     await storyEditorPage.updateMetaTagContent('story meta tag');
-    for (var i = 0; i < 3; i++) {
+    for (var i = 0; i < 2; i++) {
       await storyEditorPage.createNewChapter(
         `Chapter ${i}`, dummyExplorationIds[i], Constants.TEST_SVG_PATH);
       await storyEditorPage.navigateToChapterWithName(`Chapter ${i}`);
@@ -180,29 +173,6 @@ describe('Topic and Story viewer functionality', function() {
     }
     await storyEditorPage.saveStory('First save');
     await storyEditorPage.publishStory();
-    await users.logout();
-  });
-
-  it('should play through story and save progress on login.', async function() {
-    await topicAndStoryViewerPage.get(
-      'math', 'topic-tasv-one', 'storyplayertasvone');
-    await topicAndStoryViewerPage.expectCompletedLessonCountToBe(0);
-    await topicAndStoryViewerPage.expectUncompletedLessonCountToBe(3);
-    await topicAndStoryViewerPage.goToChapterIndex(0);
-    await explorationPlayerPage.submitAnswer('Continue', null);
-
-    // Signing up with the login button should redirect the user back to the
-    // exploration.
-    var loginButton = element(by.css('.e2e-test-login-button'));
-    await action.click('Login button', loginButton);
-    await users.createAndLoginUser(
-      'newStoryViewer@storyviewer.com', 'newStoryViewer', false);
-
-    await explorationPlayerPage.submitAnswer('Continue', null);
-    await topicAndStoryViewerPage.get(
-      'math', 'topic-tasv-one', 'storyplayertasvone');
-    await topicAndStoryViewerPage.expectCompletedLessonCountToBe(2);
-    await topicAndStoryViewerPage.expectUncompletedLessonCountToBe(1);
     await users.logout();
   });
 
@@ -259,52 +229,5 @@ describe('Topic and Story viewer functionality', function() {
       // Wait until the practice tab is loaded.
       await topicAndStoryViewerPage.waitForPracticeTabContainer();
     });
-  });
-
-  it(
-    'should check for topic description, stories and revision cards',
-    async function() {
-      await users.createAndLoginCurriculumAdminUser(
-        'creator1@storyViewer.com', 'creatorStoryViewer1');
-      await topicViewerPage.get('math', 'Topic TASV1');
-      await topicViewerPage.expectTopicInformationToBe('Description');
-      await topicViewerPage.expectStoryCountToBe(1);
-      await topicViewerPage.moveToRevisionTab();
-      await subTopicViewerPage.expectRevisionCardCountToBe(1);
-      await subTopicViewerPage.get('Subtopic TASV1');
-      await subTopicViewerPage.expectConceptCardCountToBe(1);
-      await subTopicViewerPage.getConceptCard();
-      await subTopicViewerPage.expectConceptCardInformationToBe(
-        'Concept card explanation');
-      await skillEditorPage.get(skillId);
-      await workflow.createQuestion();
-      await skillEditorPage.get(skillId);
-      await skillEditorPage.moveToQuestionsTab();
-      await topicViewerPage.get('math', 'Topic TASV1');
-      await topicViewerPage.moveToPracticeTab();
-      await topicViewerPage.selectSkillForPractice('Subtopic TASV1');
-
-      await waitFor.clientSideRedirection(async() => {
-        // Start practice to trigger redirection to practice session page.
-        await topicViewerPage.startPractice();
-      }, (url) => {
-        // Wait until the URL has changed to /practice.
-        return (/practice/.test(url));
-      }, async() => {
-        await topicAndStoryViewerPage.waitForPracticeSessionContainer();
-      });
-
-      for (let i = 0; i < 10; i++) {
-        await explorationPlayerPage.submitAnswer('TextInput', 'correct');
-        await explorationPlayerPage.clickThroughToNextCard();
-      }
-      await topicViewerPage.expectMessageAfterCompletion(
-        'Session complete. Well done!'
-      );
-      await users.logout();
-    });
-
-  afterEach(async function() {
-    await general.checkForConsoleErrors([]);
   });
 });
