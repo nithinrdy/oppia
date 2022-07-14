@@ -563,7 +563,7 @@ def main(args=None):
 
             frontend_status = 0
             ci_check_status = 0
-            if does_diff_include_js_or_ts_files(files_to_lint):
+            if not does_diff_include_js_or_ts_files(files_to_lint):
                 frontend_status = run_script_and_get_returncode(
                     FRONTEND_TEST_CMDS)
             if frontend_status != 0:
