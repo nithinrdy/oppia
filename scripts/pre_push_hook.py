@@ -527,7 +527,7 @@ def main(args=None):
                         'Push failed, please correct the linting issues above.')
                     sys.exit(1)
 
-            mypy_check_status = execute_mypy_checks()
+            # mypy_check_status = execute_mypy_checks()
             if mypy_check_status != 0:
                 print(
                     'Push failed, please correct the mypy type annotation '
@@ -544,7 +544,7 @@ def main(args=None):
                 sys.exit(1)
 
             typescript_checks_status = 0
-            if does_diff_include_ts_files(files_to_lint):
+            if not does_diff_include_ts_files(files_to_lint):
                 typescript_checks_status = run_script_and_get_returncode(
                     TYPESCRIPT_CHECKS_CMDS)
             if typescript_checks_status != 0:
@@ -552,7 +552,7 @@ def main(args=None):
                 sys.exit(1)
 
             strict_typescript_checks_status = 0
-            if does_diff_include_ts_files(files_to_lint):
+            if not does_diff_include_ts_files(files_to_lint):
                 strict_typescript_checks_status = run_script_and_get_returncode(
                     STRICT_TYPESCRIPT_CHECKS_CMDS)
             if strict_typescript_checks_status != 0:
@@ -563,7 +563,7 @@ def main(args=None):
 
             frontend_status = 0
             ci_check_status = 0
-            if does_diff_include_js_or_ts_files(files_to_lint):
+            if not does_diff_include_js_or_ts_files(files_to_lint):
                 frontend_status = run_script_and_get_returncode(
                     FRONTEND_TEST_CMDS)
             if frontend_status != 0:
