@@ -528,11 +528,11 @@ def main(args=None):
                     sys.exit(1)
 
             # mypy_check_status = execute_mypy_checks()
-            if mypy_check_status != 0:
-                print(
-                    'Push failed, please correct the mypy type annotation '
-                    'issues above.')
-                sys.exit(mypy_check_status)
+            # if mypy_check_status != 0:
+                # print(
+                    # 'Push failed, please correct the mypy type annotation '
+                    # 'issues above.')
+                # sys.exit(mypy_check_status)
 
             backend_associated_test_file_check_status = (
                 run_script_and_get_returncode(
