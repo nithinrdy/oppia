@@ -569,7 +569,7 @@ def main(args=None):
             if frontend_status != 0:
                 print('Push aborted due to failing frontend tests.')
                 sys.exit(1)
-            if does_diff_include_ci_config_or_js_files(files_to_lint):
+            if not does_diff_include_ci_config_or_js_files(files_to_lint):
                 ci_check_status = run_script_and_get_returncode(
                     CI_PROTRACTOR_CHECK_CMDS)
             if ci_check_status != 0:
