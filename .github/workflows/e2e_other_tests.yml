@@ -3,7 +3,7 @@ on:
   push:
     branches:
       - develop
-      - *
+      - m*
   pull_request:
     branches:
       - develop
