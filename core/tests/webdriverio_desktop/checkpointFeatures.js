@@ -99,7 +99,7 @@ describe('Topic and Story viewer functionality', function() {
     var handle = await browser.getWindowHandle();
     await topicsAndSkillsDashboardPage.get();
     await topicsAndSkillsDashboardPage.createTopic(
-      'Checkpoint features topic', 'topic-checkpoint-features-one',
+      'Checkpoint features topic', 'topic-cf-one',
       'Description', false);
     await topicEditorPage.submitTopicThumbnail(Constants.TEST_SVG_PATH, true);
     await topicEditorPage.updateMetaTagContent('topic meta tag');
@@ -133,7 +133,7 @@ describe('Topic and Story viewer functionality', function() {
     await topicsAndSkillsDashboardPage.get();
     await topicsAndSkillsDashboardPage.editTopic('Checkpoint features topic');
     await topicEditorPage.addSubtopic(
-      'Checkpoint features subtopic', 'subtopic-checkpoint-features-one',
+      'Checkpoint features subtopic', 'subtopic-cf-one',
       Constants.TEST_SVG_PATH, 'Subtopic content');
     await topicEditorPage.addConceptCardToSubtopicExplanation(
       'Checkpoint features skill');
@@ -166,7 +166,7 @@ describe('Topic and Story viewer functionality', function() {
   it('should encounter checkpoint progress modal upon completing a checkpoint',
     async function() {
       await topicAndStoryViewerPage.get(
-        'math', 'topic-checkpoint-features-one', 'checkpointfeaturesstory');
+        'math', 'topic-cf-one', 'checkpointfeaturesstory');
       await topicAndStoryViewerPage.expectCompletedLessonCountToBe(0);
       await topicAndStoryViewerPage.expectUncompletedLessonCountToBe(1);
       await topicAndStoryViewerPage.goToChapterIndex(0);
