@@ -51,6 +51,7 @@ var ExplorationPlayerPage = function() {
     '.e2e-test-lesson-info-modal-checkpoint-message');
   var lessonInfoModalCloseButton = $(
     '.e2e-test-close-lesson-info-modal-button');
+  var lessonInfoTooltip = $('.e2e-test-close-lesson-info-tooltip');
   var gotItButton = $('.e2e-test-learner-got-it-button');
   var infoCardRating = $('.e2e-test-info-card-rating');
   var nextCardButton = $('.e2e-test-continue-to-next-card-button');
@@ -348,6 +349,11 @@ var ExplorationPlayerPage = function() {
       'Checkpoint message takes too long to disappear');
   };
 
+  this.dismissLessonInfoTooltip = async function() {
+    await waitFor.elementToBeClickable(lessonInfoTooltip);
+    await action.click('Lesson Info Tooltip', lessonInfoTooltip);
+  };
+
   this.expectCheckpointProgressMessageToBeDisplayedOnLessonInfoModal =
     async function() {
       await waitFor.elementToBeClickable(explorationInfoIcon);
@@ -356,9 +362,9 @@ var ExplorationPlayerPage = function() {
         lessonInfoModalCheckpointMessage,
         'Checkpoint message on the lesson info modal takes too long to appear');
       expect(lessonInfoModalCheckpointMessage).toHaveText([
-        'You just completed the first checkpoint! Good start!',
-        'Great work completing your first checkpoint! Keep it going!',
-        'A perfect start! Keep it up!'
+        'You\'re making good progress! Keep going!',
+        'Amazing! You just completed your second checkpoint!',
+        'One more checkpoint completed, you\'re doing great!'
       ]);
       await action.click('Close Button', lessonInfoModalCloseButton);
     };

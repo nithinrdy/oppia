@@ -42,27 +42,24 @@ describe('Topic and Story viewer functionality', function() {
   var topicEditorPage = null;
   var storyEditorPage = null;
   var explorationPlayerPage = null;
-  var dummyExplorationIds = [];
+  var dummyExplorationId = '';
   var skillEditorPage = null;
 
-  var createDummyExplorations = async function() {
+  var createDummyExploration = async function() {
     var EXPLORATION = {
       category: 'English',
-      objective: 'The goal is to check story viewer functionality.',
+      objective: 'The goal is to check checkpoint features functionality.',
       language: 'English'
     };
-
-    for (var i = 1; i <= 3; i++) {
-      await workflow.createAndPublishExplorationWithAdditionalCheckpoint(
-        `Exploration TASV1 - ${i}`,
-        EXPLORATION.category,
-        EXPLORATION.objective,
-        EXPLORATION.language,
-        i === 1,
-        true
-      );
-      dummyExplorationIds.push(await general.getExplorationIdFromEditor());
-    }
+    await workflow.createAndPublishExplorationWithAdditionalCheckpoints(
+      'Exploration TASV1 - 1',
+      EXPLORATION.category,
+      EXPLORATION.objective,
+      EXPLORATION.language,
+      true,
+      true
+    );
+    dummyExplorationId = await general.getExplorationIdFromEditor();
   };
 
   beforeAll(async function() {
@@ -94,15 +91,16 @@ describe('Topic and Story viewer functionality', function() {
     // They should be removed after the checkpoint_celebration flag is
     // deprecated.
     await adminPage.getFeaturesTab();
-    var endChapterFlag = (
+    var checkpointCelebrationFlag = (
       await adminPage.getCheckpointCelebrationFeatureElement());
-    await adminPage.enableFeatureForProd(endChapterFlag);
+    await adminPage.enableFeatureForProd(checkpointCelebrationFlag);
 
-    await createDummyExplorations();
+    await createDummyExploration();
     var handle = await browser.getWindowHandle();
     await topicsAndSkillsDashboardPage.get();
     await topicsAndSkillsDashboardPage.createTopic(
-      'Topic TASV1', 'topic-tasv-one', 'Description', false);
+      'Checkpoint features topic', 'topic-checkpoint-features-one',
+      'Description', false);
     await topicEditorPage.submitTopicThumbnail(Constants.TEST_SVG_PATH, true);
     await topicEditorPage.updateMetaTagContent('topic meta tag');
     await topicEditorPage.updatePageTitleFragment('topic page title');
@@ -122,7 +120,7 @@ describe('Topic and Story viewer functionality', function() {
 
     await topicsAndSkillsDashboardPage.get();
     await topicsAndSkillsDashboardPage.createSkillWithDescriptionAndExplanation(
-      'Skill TASV1', 'Concept card explanation', false);
+      'Checkpoint features skill', 'Concept card explanation', false);
     await skillEditorPage.addRubricExplanationForDifficulty(
       'Easy', 'Second explanation for easy difficulty.');
     await skillEditorPage.saveOrPublishSkill('Edited rubrics');
@@ -131,36 +129,36 @@ describe('Topic and Story viewer functionality', function() {
     await topicsAndSkillsDashboardPage.get();
     await topicsAndSkillsDashboardPage.navigateToSkillsTab();
     await topicsAndSkillsDashboardPage.assignSkillToTopic(
-      'Skill TASV1', 'Topic TASV1');
+      'Checkpoint features skill', 'Checkpoint features topic');
     await topicsAndSkillsDashboardPage.get();
-    await topicsAndSkillsDashboardPage.editTopic('Topic TASV1');
+    await topicsAndSkillsDashboardPage.editTopic('Checkpoint features topic');
     await topicEditorPage.addSubtopic(
-      'Subtopic TASV1', 'subtopic-tasv-one', Constants.TEST_SVG_PATH,
-      'Subtopic content');
-    await topicEditorPage.addConceptCardToSubtopicExplanation('Skill TASV1');
+      'Checkpoint features subtopic', 'subtopic-checkpoint-features-one',
+      Constants.TEST_SVG_PATH, 'Subtopic content');
+    await topicEditorPage.addConceptCardToSubtopicExplanation(
+      'Checkpoint features skill');
     await topicEditorPage.saveSubtopicExplanation();
     await topicEditorPage.saveTopic('Added subtopic.');
     await topicEditorPage.navigateToTopicEditorTab();
     await topicEditorPage.navigateToReassignModal();
-    await topicEditorPage.dragSkillToSubtopic('Skill TASV1', 0);
+    await topicEditorPage.dragSkillToSubtopic('Checkpoint features skill', 0);
     await topicEditorPage.saveRearrangedSkills();
     await topicEditorPage.saveTopic('Added skill to subtopic.');
     await topicEditorPage.publishTopic();
-    await topicsAndSkillsDashboardPage.editTopic('Topic TASV1');
+    await topicsAndSkillsDashboardPage.editTopic('Checkpoint features topic');
     await topicEditorPage.createStory(
-      'Story TASV1', 'storyplayertasvone', 'Story description',
+      'Checkpoint features story', 'storyplayertasvone', 'Story description',
       Constants.TEST_SVG_PATH);
     await storyEditorPage.updateMetaTagContent('story meta tag');
-    for (var i = 0; i < 3; i++) {
-      await storyEditorPage.createNewChapter(
-        `Chapter ${i}`, dummyExplorationIds[i], Constants.TEST_SVG_PATH);
-      await storyEditorPage.navigateToChapterWithName(`Chapter ${i}`);
-      await storyEditorPage.changeNodeDescription('Chapter description');
-      await storyEditorPage.changeNodeOutline(
-        await forms.toRichText(`outline ${i}`));
-      await storyEditorPage.navigateToStoryEditorTab();
-    }
-    await storyEditorPage.saveStory('First save');
+    await storyEditorPage.createNewChapter(
+      'Checkpoint features story', dummyExplorationId, Constants.TEST_SVG_PATH);
+    await storyEditorPage.navigateToChapterWithName(
+      'Checkpoint features story');
+    await storyEditorPage.changeNodeDescription('Chapter description');
+    await storyEditorPage.changeNodeOutline(
+      await forms.toRichText('outline 1'));
+    await storyEditorPage.navigateToStoryEditorTab();
+    await storyEditorPage.saveStory('Added chapter');
     await storyEditorPage.publishStory();
     await users.logout();
   });
@@ -168,10 +166,10 @@ describe('Topic and Story viewer functionality', function() {
   it('should encounter checkpoint progress modal upon completing a checkpoint',
     async function() {
       await topicAndStoryViewerPage.get(
-        'math', 'topic-tasv-one', 'storyplayertasvone');
-      await topicAndStoryViewerPage.expectCompletedLessonCountToBe(0);
-      await topicAndStoryViewerPage.expectUncompletedLessonCountToBe(3);
+        'math', 'topic-checkpoint-features-one', 'storyplayertasvone');
       await topicAndStoryViewerPage.goToChapterIndex(0);
+      await explorationPlayerPage.submitAnswer('Continue', null);
+      await explorationPlayerPage.dismissLessonInfoTooltip();
       await explorationPlayerPage.submitAnswer('Continue', null);
 
       await explorationPlayerPage

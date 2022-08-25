@@ -209,7 +209,7 @@ var createAndPublishTwoCardExploration = async function(
   await publishExploration();
 };
 
-var createAndPublishExplorationWithAdditionalCheckpoint = async function(
+var createAndPublishExplorationWithAdditionalCheckpoints = async function(
     title, category, objective, language, welcomeModalIsShown,
     correctnessFeedbackIsEnabled) {
   await createExploration(welcomeModalIsShown);
@@ -231,6 +231,14 @@ var createAndPublishExplorationWithAdditionalCheckpoint = async function(
   await explorationEditorMainTab.moveToState('third card');
   await explorationEditorMainTab.setContent(
     await forms.toRichText('card 3'), true);
+  await explorationEditorMainTab.enableCheckpointForCurrentState();
+  await explorationEditorMainTab.setInteraction('Continue');
+  responseEditor = await explorationEditorMainTab.getResponseEditor(
+    'default');
+  await responseEditor.setDestination('fourth card', true, null);
+  await explorationEditorMainTab.moveToState('fourth card');
+  await explorationEditorMainTab.setContent(
+    await forms.toRichText('card 4'), true);
   await explorationEditorMainTab.setInteraction('EndExploration');
 
   var explorationEditorSettingsTab = explorationEditorPage.getSettingsTab();
@@ -396,8 +404,8 @@ exports.createAndPublishExploration = createAndPublishExploration;
 exports.createCollectionAsAdmin = createCollectionAsAdmin;
 exports.createExplorationAsAdmin = createExplorationAsAdmin;
 exports.createAndPublishTwoCardExploration = createAndPublishTwoCardExploration;
-exports.createAndPublishExplorationWithAdditionalCheckpoint = (
-  createAndPublishExplorationWithAdditionalCheckpoint);
+exports.createAndPublishExplorationWithAdditionalCheckpoints = (
+  createAndPublishExplorationWithAdditionalCheckpoints);
 
 exports.canAddRolesToUsers = canAddRolesToUsers;
 exports.isExplorationCommunityOwned = isExplorationCommunityOwned;
