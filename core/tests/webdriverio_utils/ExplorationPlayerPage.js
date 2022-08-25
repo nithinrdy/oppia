@@ -350,7 +350,8 @@ var ExplorationPlayerPage = function() {
   };
 
   this.dismissLessonInfoTooltip = async function() {
-    await waitFor.elementToBeClickable(lessonInfoTooltip);
+    await waitFor.visibilityOf(
+      lessonInfoTooltip, 'Lesson info tooltip takes too long to appear');
     await action.click('Lesson Info Tooltip', lessonInfoTooltip);
   };
 

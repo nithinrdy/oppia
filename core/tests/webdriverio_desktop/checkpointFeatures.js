@@ -52,7 +52,7 @@ describe('Topic and Story viewer functionality', function() {
       language: 'English'
     };
     await workflow.createAndPublishExplorationWithAdditionalCheckpoints(
-      'Exploration TASV1 - 1',
+      'Exploration - 1',
       EXPLORATION.category,
       EXPLORATION.objective,
       EXPLORATION.language,
@@ -147,8 +147,8 @@ describe('Topic and Story viewer functionality', function() {
     await topicEditorPage.publishTopic();
     await topicsAndSkillsDashboardPage.editTopic('Checkpoint features topic');
     await topicEditorPage.createStory(
-      'Checkpoint features story', 'storyplayertasvone', 'Story description',
-      Constants.TEST_SVG_PATH);
+      'Checkpoint features story', 'checkpointfeaturesstory',
+      'Story description', Constants.TEST_SVG_PATH);
     await storyEditorPage.updateMetaTagContent('story meta tag');
     await storyEditorPage.createNewChapter(
       'Checkpoint features story', dummyExplorationId, Constants.TEST_SVG_PATH);
@@ -156,7 +156,7 @@ describe('Topic and Story viewer functionality', function() {
       'Checkpoint features story');
     await storyEditorPage.changeNodeDescription('Chapter description');
     await storyEditorPage.changeNodeOutline(
-      await forms.toRichText('outline 1'));
+      await forms.toRichText('node outline'));
     await storyEditorPage.navigateToStoryEditorTab();
     await storyEditorPage.saveStory('Added chapter');
     await storyEditorPage.publishStory();
@@ -166,7 +166,9 @@ describe('Topic and Story viewer functionality', function() {
   it('should encounter checkpoint progress modal upon completing a checkpoint',
     async function() {
       await topicAndStoryViewerPage.get(
-        'math', 'topic-checkpoint-features-one', 'storyplayertasvone');
+        'math', 'topic-checkpoint-features-one', 'checkpointfeaturesstory');
+      await topicAndStoryViewerPage.expectCompletedLessonCountToBe(0);
+      await topicAndStoryViewerPage.expectUncompletedLessonCountToBe(1);
       await topicAndStoryViewerPage.goToChapterIndex(0);
       await explorationPlayerPage.submitAnswer('Continue', null);
       await explorationPlayerPage.dismissLessonInfoTooltip();
