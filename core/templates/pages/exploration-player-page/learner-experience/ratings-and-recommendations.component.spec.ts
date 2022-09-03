@@ -143,7 +143,8 @@ describe('Ratings and recommendations component', () => {
       null, false, 'bg_color_2', 'filename_2');
 
     expect(componentInstance.inStoryMode).toBe(undefined);
-    expect(componentInstance.storyViewerUrl).toBe(undefined);
+    expect(componentInstance.topicViewerUrl).toBe(undefined);
+    expect(componentInstance.classroomUrlFragment).toBe(undefined);
     expect(componentInstance.practiceQuestionsAreEnabled).toBe(false);
 
     spyOn(urlService, 'getCollectionIdFromExplorationUrl').and.returnValue(
@@ -158,7 +159,7 @@ describe('Ratings and recommendations component', () => {
     spyOn(explorationPlayerStateService, 'isInStoryChapterMode')
       .and.returnValue(true);
     spyOn(urlInterpolationService, 'interpolateUrl').and.returnValue(
-      'dummy_story_viewer_page_url');
+      'dummy_topic_viewer_page_url');
     spyOnProperty(learnerViewRatingService, 'onRatingUpdated').and.returnValue(
       mockOnRatingUpdated);
     spyOn(componentInstance, 'getIconUrl').and.returnValue('thumbnail_url');
@@ -191,8 +192,10 @@ describe('Ratings and recommendations component', () => {
       'story_id', 'filename_2');
     expect(componentInstance.nextStoryNodeIconUrl).toBe('thumbnail_url');
     expect(urlInterpolationService.interpolateUrl).toHaveBeenCalled();
-    expect(componentInstance.storyViewerUrl).toBe(
-      'dummy_story_viewer_page_url');
+    expect(componentInstance.topicViewerUrl).toBe(
+      'dummy_topic_viewer_page_url');
+    expect(componentInstance.classroomUrlFragment).toBe(
+      'classroom_url_fragment');
     expect(componentInstance.practiceQuestionsAreEnabled).toBe(true);
     expect(componentInstance.userRating).toEqual(userRating);
     expect(alertsService.addSuccessMessage).toHaveBeenCalled();
@@ -203,12 +206,13 @@ describe('Ratings and recommendations component', () => {
   it('should not generate story page url and determine the next story node' +
   'if not in story mode', fakeAsync(() => {
     expect(componentInstance.inStoryMode).toBe(undefined);
-    expect(componentInstance.storyViewerUrl).toBe(undefined);
+    expect(componentInstance.topicViewerUrl).toBe(undefined);
+    expect(componentInstance.classroomUrlFragment).toBe(undefined);
 
     spyOn(explorationPlayerStateService, 'isInStoryChapterMode')
       .and.returnValue(false);
     spyOn(urlInterpolationService, 'interpolateUrl').and.returnValue(
-      'dummy_story_viewer_page_url');
+      'dummy_topic_viewer_page_url');
 
     componentInstance.ngOnInit();
     tick();
@@ -217,7 +221,8 @@ describe('Ratings and recommendations component', () => {
       .toHaveBeenCalled();
     expect(componentInstance.inStoryMode).toBe(false);
     expect(urlInterpolationService.interpolateUrl).not.toHaveBeenCalled();
-    expect(componentInstance.storyViewerUrl).toBe(undefined);
+    expect(componentInstance.topicViewerUrl).toBe(undefined);
+    expect(componentInstance.classroomUrlFragment).toBe(undefined);
   }));
 
   it('should obtain next chapter thumbnail url', () => {

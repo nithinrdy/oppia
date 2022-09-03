@@ -114,6 +114,7 @@ export class TutorCardComponent {
   // Until the response is received, it remains undefined.
   @Input() completedChaptersCount: number | undefined;
   @Input() milestoneMessageIsToBeDisplayed!: boolean;
+  @Input() chapterCountIsFetched: boolean;
   directiveSubscriptions = new Subscription();
   private _editorPreviewMode: boolean;
   arePreviousResponsesShown: boolean = false;
@@ -283,6 +284,7 @@ export class TutorCardComponent {
     }
 
     if (
+      this.chapterCountIsFetched &&
       !this.milestoneMessageIsToBeDisplayed &&
       MILESTONE_SPECIFIC_COMPLETED_CHAPTER_COUNTS.includes(
         this.completedChaptersCount)
@@ -296,7 +298,10 @@ export class TutorCardComponent {
     }
 
     for (let milestoneCount of MILESTONE_SPECIFIC_COMPLETED_CHAPTER_COUNTS) {
-      if (milestoneCount > this.completedChaptersCount) {
+      if (
+        milestoneCount > this.completedChaptersCount &&
+        this.chapterCountIsFetched
+      ) {
         this.nextMilestoneChapterCount = milestoneCount;
         return true;
       }

@@ -50,8 +50,7 @@
   </div>
 
   <div *ngIf="inStoryMode && !userIsLoggedIn && !isSignUpSectionHidden()" class="conversation-skin-login-container e2e-test-end-chapter-sign-up-section">
-    <div class="conversation-skin-congratulations-text" translate="I18N_CHAPTER_COMPLETION"></div>
-    <span class="conversation-skin-login-text text-secondary" translate="I18N_SAVE_PROGRESS"></span>
+    <span class="conversation-skin-login-text" translate="I18N_SAVE_PROGRESS"></span>
     <div class="mt-2">
       <button mat-button class="md-raised oppia-sign-up-button e2e-test-login-button text-light" (click)="signIn()">
         SIGN UP
@@ -72,12 +71,13 @@
                                         [nextStoryNodeThumbnailUrl]="nextStoryNodeIconUrl ? nextStoryNodeIconUrl : ''"
                                         [nextStoryNodeThumbnailBgColor]="nextStoryNode ? nextStoryNode.thumbnailBgColor : ''"
                                         [nextStoryNodeTitle]="nextStoryNode ? nextStoryNode.title : ''"
-                                        [practiceQuestionsAreEnabled]="practiceQuestionsAreEnabled">
+                                        [practiceQuestionsAreEnabled]="practiceQuestionsAreEnabled"
+                                        [classroomUrlFragment]="classroomUrlFragment ? classroomUrlFragment : ''">
     </oppia-post-chapter-recommendations>
   </div>
 
   <div *ngIf="inStoryMode" class="conversation-skin-back-to-collection-container">
-    <a [href]="storyViewerUrl" class="conversation-skin-back-to-collection" translate="I18N_PLAYER_RETURN_TO_STORY"></a>
+    <a [href]="topicViewerUrl" class="conversation-skin-back-to-collection" translate="I18N_PLAYER_RETURN_TO_TOPIC"></a>
   </div>
   <div *ngIf="!collectionSummary && !isRefresherExploration && !inStoryMode" class="conversation-skin-back-to-collection-container">
     <a href="/community-library" class="conversation-skin-back-to-collection" translate="I18N_PLAYER_RETURN_TO_LIBRARY"></a>
@@ -159,10 +159,6 @@
   }
 
   .conversation-skin-login-container .conversation-skin-login-text {
-    font-size: 0.8em;
-  }
-
-  .conversation-skin-login-container .conversation-skin-congratulations-text {
     font-size: 1.2em;
     font-weight: 500;
   }

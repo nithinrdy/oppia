@@ -35,6 +35,7 @@ export class PostChapterRecommendationsComponent {
   @Input() nextStoryNodeThumbnailUrl!: string;
   @Input() nextStoryNodeThumbnailBgColor!: string;
   @Input() nextStoryNodeTitle!: string;
+  @Input() classroomUrlFragment!: string;
 
   // The below property will not be null because the property that is being
   // passed down as input from the parent component is initialized to
@@ -66,5 +67,9 @@ export class PostChapterRecommendationsComponent {
         classroom_url_fragment: (
           this.urlService.getUrlParams().classroom_url_fragment)
       }) + '/revision';
+  }
+
+  isClassroomValid(): boolean {
+    return this.classroomUrlFragment === 'math';
   }
 }

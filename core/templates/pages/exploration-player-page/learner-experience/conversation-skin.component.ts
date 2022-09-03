@@ -154,6 +154,7 @@ export class ConversationSkinComponent {
   // Until the response is received, it remains undefined.
   completedChaptersCount: number | undefined;
   chapterIsCompletedForTheFirstTime: boolean = false;
+  chapterCountIsFetched: boolean = false;
   CHECKPOINTS_FEATURE_IS_ENABLED: boolean = false;
   pidInUrl: string;
   submitButtonIsDisabled = true;
@@ -946,6 +947,7 @@ export class ConversationSkinComponent {
                     this.completedChaptersCount = newCompletedChaptersCount;
                     this.chapterIsCompletedForTheFirstTime = true;
                   }
+                  this.chapterCountIsFetched = true;
                 });
           });
         } else {

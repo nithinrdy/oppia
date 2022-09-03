@@ -29,7 +29,30 @@
         {{ nextStoryNodeTitle }}
       </p>
     </div>
-    <p *ngIf="nextStoryNodeTitle" class="or-text">or</p>
+    <div *ngIf="!nextStoryNodeTitle && isClassroomValid()" class="recommendation-card-wrapper">
+      <div class="recommendation-card">
+        <svg width="192" height="150" class="recommendation-card-svg">
+          <title>Back to Math classroom card</title>
+          <a [attr.href]="'/learn/math'">
+            <rect width="192"
+                  height="150"
+                  [attr.fill]="'#f8bf74'">
+            </rect>
+            <image x="17"
+                   y="20"
+                   height="180"
+                   width="240"
+                   class="post-chapter-recommendations-classroom-icon"
+                   [attr.xlink:href]="getStaticImageUrl('/general/math_classroom.svg')">
+            </image>
+          </a>
+        </svg>
+      </div>
+      <p class="font-italic">
+        {{ 'I18N_END_CHAPTER_EXPLORE_OTHER_TOPICS_IN_MATH' | translate }}
+      </p>
+    </div>
+    <p *ngIf="nextStoryNodeTitle || isClassroomValid()" class="or-text">or</p>
     <div *ngIf="practiceQuestionsAreEnabled" class="recommendation-card-wrapper">
       <div class="recommendation-card">
         <svg width="192" height="150" class="recommendation-card-svg">
@@ -107,6 +130,9 @@
   }
   .post-chapter-recommendation-cards-container .next-story-node-image {
     transform: scale(0.8);
+  }
+  .post-chapter-recommendation-cards-container .post-chapter-recommendations-classroom-icon {
+    transform: scale(0.7);
   }
   .post-chapter-recommendation-cards-container .post-chapter-recommendations-practice-icon {
     transform: scale(0.7);

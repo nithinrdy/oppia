@@ -30,7 +30,7 @@ import { UserService } from 'services/user.service';
 import { LearnerViewRatingService } from '../services/learner-view-rating.service';
 import { ExplorationPlayerStateService } from './../services/exploration-player-state.service';
 import { UrlInterpolationService } from 'domain/utilities/url-interpolation.service';
-import { TopicViewerDomainConstants } from 'domain/topic_viewer/topic-viewer-domain.constants';
+import { ClassroomDomainConstants } from 'domain/classroom/classroom-domain.constants';
 import { PlatformFeatureService } from 'services/platform-feature.service';
 import { LocalStorageService } from 'services/local-storage.service';
 import { StoryViewerBackendApiService } from 'domain/story_viewer/story-viewer-backend-api.service';
@@ -78,7 +78,8 @@ export class RatingsAndRecommendationsComponent {
   practiceQuestionsAreEnabled: boolean = false;
   // The below properties will be undefined if the exploration is not being
   // played in story mode, i.e. inStoryMode is false.
-  storyViewerUrl: string | undefined;
+  topicViewerUrl: string | undefined;
+  classroomUrlFragment: string | undefined;
   nextStoryNodeIconUrl: string | undefined;
   storyId: string | undefined;
   collectionId: string;
@@ -126,12 +127,12 @@ export class RatingsAndRecommendationsComponent {
           }
         }
       });
-      this.storyViewerUrl = this.urlInterpolationService.interpolateUrl(
-        TopicViewerDomainConstants.STORY_VIEWER_URL_TEMPLATE, {
+      this.topicViewerUrl = this.urlInterpolationService.interpolateUrl(
+        ClassroomDomainConstants.TOPIC_VIEWER_URL_TEMPLATE, {
           topic_url_fragment: topicUrlFragment,
-          classroom_url_fragment: classroomUrlFragment,
-          story_url_fragment: storyUrlFragment
+          classroom_url_fragment: classroomUrlFragment
         });
+      this.classroomUrlFragment = classroomUrlFragment;
 
       this.topicViewerBackendApiService.fetchTopicDataAsync(
         topicUrlFragment, classroomUrlFragment

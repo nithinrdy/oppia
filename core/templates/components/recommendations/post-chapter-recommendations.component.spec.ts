@@ -83,4 +83,14 @@ describe('End chapter check mark component', function() {
         classroom_url_fragment: 'classroom_url_fragment'
       });
   });
+
+  it('should determine if classroom is valid', () => {
+    component.classroomUrlFragment = 'math';
+
+    expect(component.isClassroomValid()).toBe(true);
+
+    component.classroomUrlFragment = 'invalid';
+
+    expect(component.isClassroomValid()).toBe(false);
+  });
 });

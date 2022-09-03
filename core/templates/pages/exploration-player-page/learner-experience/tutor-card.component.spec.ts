@@ -473,6 +473,7 @@ describe('Tutor card component', () => {
     componentInstance.inStoryMode = true;
     componentInstance.milestoneMessageIsToBeDisplayed = false;
     componentInstance.completedChaptersCount = 2;
+    componentInstance.chapterCountIsFetched = true;
     spyOn(componentInstance, 'setNextMilestoneAndCheckIfProgressBarIsShown')
       .and.callThrough();
 
@@ -502,6 +503,7 @@ describe('Tutor card component', () => {
     'is greater than 50', () => {
     componentInstance.inStoryMode = true;
     componentInstance.milestoneMessageIsToBeDisplayed = false;
+    componentInstance.chapterCountIsFetched = true;
     componentInstance.completedChaptersCount = 51;
     spyOn(componentInstance, 'setNextMilestoneAndCheckIfProgressBarIsShown')
       .and.callThrough();
@@ -514,6 +516,7 @@ describe('Tutor card component', () => {
   it('should not show milestone progress bar if not in story mode', () => {
     componentInstance.inStoryMode = false;
     componentInstance.milestoneMessageIsToBeDisplayed = false;
+    componentInstance.chapterCountIsFetched = true;
     componentInstance.completedChaptersCount = 1;
     spyOn(componentInstance, 'setNextMilestoneAndCheckIfProgressBarIsShown')
       .and.callThrough();
@@ -527,6 +530,7 @@ describe('Tutor card component', () => {
     'displayed, and completed chapters count is a milestone', () => {
     componentInstance.inStoryMode = true;
     componentInstance.milestoneMessageIsToBeDisplayed = true;
+    componentInstance.chapterCountIsFetched = true;
     componentInstance.completedChaptersCount = 1;
     spyOn(componentInstance, 'setNextMilestoneAndCheckIfProgressBarIsShown')
       .and.callThrough();
@@ -540,6 +544,7 @@ describe('Tutor card component', () => {
     ' is a milestone, if the milestone message is not to be displayed', () => {
     componentInstance.inStoryMode = true;
     componentInstance.milestoneMessageIsToBeDisplayed = false;
+    componentInstance.chapterCountIsFetched = true;
     componentInstance.completedChaptersCount = 10;
     spyOn(componentInstance, 'setNextMilestoneAndCheckIfProgressBarIsShown')
       .and.callThrough();
